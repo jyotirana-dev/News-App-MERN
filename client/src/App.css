@@ -1,0 +1,49 @@
+.register-container {
+  width: 350px;
+  margin: 80px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px gray;
+}
+
+.register-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.register-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.register-container button {
+  width: 100%;
+  padding: 10px;
+  background: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.password-box {
+  display: flex;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.password-box input {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.password-box button {
+  width: 60px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
