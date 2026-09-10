@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -10,7 +10,7 @@ import UpdateNews from "./pages/UpdateNews";
 import NewsDetails from "./pages/NewsDetails";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-
+import NotFound from "./pages/NotFound";
 import "./App.css";
 
 import { useEffect, useState, useContext } from "react";
@@ -19,11 +19,11 @@ import axios from "axios";
 import { AuthContext } from "./AuthContext";
 
 function App() {
-const {
-  setIsLogin,
-  setUser,
-  user
-} = useContext(AuthContext);
+
+
+const { setIsLogin, setUser,user } = useContext(AuthContext);
+
+const location = useLocation();
 
 const [loading,setLoading] = useState(true);
 
@@ -45,28 +45,29 @@ Authorization:"Bearer "+token
 })
 
 .then((res)=>{
-console.log("VERIFY DATA:",res.data);
-setIsLogin(true);
 
-// agar backend me res.send(req.user) hai
+console.log("VERIFY DATA:",res.data);
+
 
 setUser(res.data);
 
+
 localStorage.setItem(
-
 "user",
-
 JSON.stringify(res.data)
-
 );
 
+
+setIsLogin(true);
+
+
 localStorage.setItem(
-
 "isLogin",
-
 "true"
+);
 
-); })
+
+})
 
 .catch((error)=>{
 
@@ -118,6 +119,8 @@ return (
 { user && user.role === "admin" && <Route path="/update-news" element={<UpdateNews />} /> }
 
 <Route path="/news/:id" element={<NewsDetails />} />
+
+<Route path='*' element={<NotFound/>}/>
 
 </Routes>
 

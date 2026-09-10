@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../AuthContext";
+import "./Home.css";
 
 
 const Home = () => {
@@ -14,6 +15,12 @@ const [news,setNews]=useState([]);
 
 const [search,setSearch]=useState("");
 
+const [currentPage,setCurrentPage] = useState(1);
+
+const newsPerPage = 6;
+
+
+
 // Get All News
 
 const getNews = async()=>{
@@ -24,15 +31,19 @@ let response = await axios.get(
 "http://localhost:8000/news"
 );
 
-
 setNews(response.data);
 
 }
+
 catch(error){
 
 console.log(error);
 
-}};
+}
+
+};
+
+
 
 useEffect(()=>{
 
@@ -40,15 +51,21 @@ getNews();
 
 },[]);
 
+
+
+
+
+
+
 // Like News
 
 const handleLike = async(id)=>{
 
 try{
 
+
 const token = localStorage.getItem("token");
 
-// agar login nahi hai
 
 if(!token){
 
@@ -60,6 +77,8 @@ return;
 
 }
 
+
+
 await axios.put(
 
 `http://localhost:8000/news/like/${id}`,
@@ -69,13 +88,18 @@ await axios.put(
 {
 
 headers:{
-Authorization:"Bearer "+token
-}
-});
 
-// refresh news data
+Authorization:"Bearer "+token
+
+}
+
+}
+
+);
+
 
 getNews();
+
 
 }
 
@@ -83,36 +107,86 @@ catch(error){
 
 console.log(error.response);
 
-}};
+}
+
+
+};
+
+
+
+
+
+
 
 // Search Filter
 
 const filteredNews = news.filter((item)=>{
+
+
 return (
 
 item.title
+
 .toLowerCase()
-.includes(search.toLowerCase())||item.category?.toLower.includes(search.toLowerCase()));
+
+.includes(search.toLowerCase())
+
+
+||
+
+
+item.category?.toLowerCase()
+
+.includes(search.toLowerCase())
+
+
+);
+
+
 });
+
+
+
+
+
+
+
+// Pagination
+
+
+const lastIndex = currentPage * newsPerPage;
+
+
+const firstIndex = lastIndex - newsPerPage;
+
+
+
+const currentNews = filteredNews.slice(
+
+firstIndex,
+
+lastIndex
+
+);
+
+
+
+
+
+
 
 return(
 
 
-<div style={{
+<div className="home-page">
 
-padding:"40px",
-background:"#f1f5f9",
-minHeight:"100vh"
-}}>
+
 
 {
+
 user &&
 
-<h1 style={{
-
-color:"red",
-textAlign:"center"
-}}>
+<h1 className="welcome-text">
 
 Welcome {user.name}
 
@@ -120,62 +194,71 @@ Welcome {user.name}
 
 }
 
-<h2 style={{
 
-textAlign:"center",
-color:"#2563eb"
 
-}}>
+
+
+<h2 className="page-title">
 
 Latest News
 
 </h2>
 
-<input type="text" placeholder="Search news..." value={search} onChange={(e)=>setSearch(e.target.value)}
 
-style={{
 
-width:"300px",
-padding:"12px",
-borderRadius:"8px",
-border:"1px solid #ccc",
-display:"block",
-margin:"20px auto"
 
-}}/>
 
-<div style={{
 
-display:"grid",
-gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",
-gap:"25px"
+<input
 
-}}>
+type="text"
+
+placeholder="Search news..."
+
+value={search}
+
+onChange={(e)=>{
+
+setSearch(e.target.value);
+
+setCurrentPage(1);
+
+}}
+
+className="search-box"
+
+/>
+
+
+
+
+
+
+
+
+<div className="news-container">
+
 
 {
 
-filteredNews.map((item)=>(
+
+currentNews.map((item)=>(
+
 
 <div
 
 key={item._id}
 
-style={{
+className="news-card"
 
-background:"white",
-borderRadius:"15px",
-overflow:"hidden",
-boxShadow:"0 5px 20px rgba(0,0,0,0.15)"
+>
 
-}}>
 
-<div
+<div className="news-content">
 
-style={{
 
-padding:"20px"
 
-}}>
+
 
 <h2>
 
@@ -183,42 +266,64 @@ padding:"20px"
 
 </h2>
 
+
+
+
+
+
 {
 
 item.video ?
 
-<video src={item.video} controls
 
-style={{
+<video
 
-width:"100%",
-height:"180px",
-borderRadius:"8px"
+src={item.video}
 
-}}/>
+controls
+
+className="news-media"
+
+/>
+
 
 :
 
+
 item.image &&
 
-<img src={ item.image.startsWith("http") ? item.image
+
+<img
+
+src={
+
+item.image.startsWith("http")
+
+?
+
+item.image
 
 :
 
 `http://localhost:8000/newsImages/${item.image}`
 
-} alt={item.title}
+}
 
-style={{
+alt={item.title}
 
-width:"100%",
-height:"180px",
-objectFit:"cover",
-borderRadius:"8px"
+className="news-media"
 
-}}/>
+/>
+
 
 }
+
+
+
+
+
+
+
 
 <p>
 
@@ -226,11 +331,21 @@ Category: {item.category}
 
 </p>
 
-<p>
+
+
+
+
+
+<p className="news-description">
+
 
 {
 
-item.content.length>100 ? item.content.substring(0,100)+"..."
+item.content.length>100
+
+?
+
+item.content.substring(0,100)+"..."
 
 :
 
@@ -238,7 +353,13 @@ item.content
 
 }
 
+
 </p>
+
+
+
+
+
 
 <p>
 
@@ -246,60 +367,203 @@ By: {item.authorname}
 
 </p>
 
+
+
+
+
+
+
 <p>
 
-📅 {new Date(item.createdAt)
-.toLocaleDateString()}
+📅 {
+
+new Date(item.createdAt)
+
+.toLocaleDateString()
+
+}
 
 </p>
+
+
+
+
+
+
+
+
+
+<div className="action-row">
+
+
+
+
 
 <button
 
 onClick={()=>handleLike(item._id)}
 
-style={{
+className="like-btn"
 
-background:"#facc15",
-border:"none",
-padding:"10px 20px",
-borderRadius:"8px",
-cursor:"pointer",
-marginRight:"10px"
-
-}}>
+>
 
 ❤️ Like {item.likes?.length || 0}
 
 </button>
 
-<Link to={`/news/${item._id}`}>
+
+
+
+
+
+
+<Link
+
+to={`/news/${item._id}#comments`}
+
+className="comment-count"
+
+>
+
+💬 Comments {item.comments?.length || 0}
+
+</Link>
+
+
+
+
+
+
+
+<Link
+
+to={`/news/${item._id}`}
+
+className="read-more"
+
+>
+
+Read More &gt;&gt;
+
+</Link>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+))
+
+
+}
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{/* Pagination */}
+
+
+
+<div className="pagination">
+
+
+{
+
+
+Array.from(
+
+{
+
+length:Math.ceil(
+
+filteredNews.length / newsPerPage
+
+)
+
+},
+
+
+(_,index)=>(
+
 
 <button
 
-style={{
+key={index}
 
-background:"#2563eb",
-color:"white",
-padding:"10px 20px",
-border:"none",
-borderRadius:"8px",
-cursor:"pointer"
+onClick={()=>setCurrentPage(index+1)}
 
-}}>
+className={
 
-Read More
+currentPage===index+1
+
+?
+
+"active-page"
+
+:
+
+""
+
+}
+
+>
+
+
+{index+1}
+
 
 </button>
-</Link>
+
+
+)
+
+
+)
+
+
+}
+
+
+
 
 </div>
+
+
+
+
+
+
+
 </div>
 
-))}
-</div>
 
-</div>
 );
+
+
 };
 
 

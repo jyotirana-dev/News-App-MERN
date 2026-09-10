@@ -1,0 +1,124 @@
+.dashboard-page{
+    padding:30px;
+    background:#f5f5f5;
+    min-height:100vh;
+}
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.dashboard-welcome{
+    text-align:center;
+    color:#e11c1c;
+    font-size:30px;
+}
+
+.dashboard-create-btn{
+    background:#198754;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    border-radius:6px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.dashboard-cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.dashboard-card{
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.15);
+}
+
+.dashboard-image{
+    width:100%;
+    height:140px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.dashboard-video{
+    width:100%;
+    height:200px;
+    border-radius:8px;
+}
+
+.dashboard-title{
+    font-size:18px;
+    margin-top:12px;
+}
+
+.dashboard-description,
+.dashboard-author{
+    color:#555;
+    font-size:14px;
+}
+
+.dashboard-date{
+    font-size:14px;
+}
+
+.dashboard-actions{
+display:flex;
+align-items:center;
+gap:15px;
+margin-top:15px;
+}
+
+.dashboard-like-btn{
+    background:#facc15;
+    border:none;
+    padding:8px 15px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.dashboard-comment-count{
+display:inline-block;
+background:#e5e7eb;
+padding:8px 14px;
+border-radius:8px;
+font-size:14px;
+color:#334155;
+text-decoration:none;
+margin-top:10px;
+cursor:pointer;
+}
+
+.dashboard-comment-count:hover{
+background:#cbd5e1;
+}
+
+.dashboard-buttons{
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+}
+
+.dashboard-update-btn{
+    background:#0d6efd;
+    color:white;
+    border:none;
+    padding:8px 20px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.dashboard-delete-btn{
+    background:#dc3545;
+    color:white;
+    border:none;
+    padding:8px 20px;
+    border-radius:5px;
+   cursor:pointer;
+}

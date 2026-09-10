@@ -1,34 +1,63 @@
-import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import React, {useEffect, useState, useContext} from "react";
+import {useParams,useNavigate} from "react-router-dom";
 import axios from "axios";
-
+import {AuthContext} from "../AuthContext";
+import "./NewsDetails.css";
+import {Link} from "react-router-dom";
 
 const NewsDetails =()=>{
 
 
 const {id}=useParams();
+const navigate = useNavigate();
+
+const {user}=useContext(AuthContext);
+console.log("DETAIL USER:", user);
 
 const [news,setNews]=useState(null);
+
+const [comment,setComment]=useState("");
+
+
+// Edit ke liye
+const [editId,setEditId]=useState(null);
+
+const [editText,setEditText]=useState("");
+
+
+
+
+// ================= GET NEWS =================
+
+const getNews = async()=>{
+
+try{
+
+let response = await axios.get(
+`http://localhost:8000/news/${id}`
+);
+
+
+setNews(response.data);
+
+
+}
+
+catch(error){
+
+console.log(error);
+
+}
+
+};
+
+
 
 
 
 useEffect(()=>{
 
-
-axios.get(`http://localhost:8000/news/${id}`)
-
-.then((res)=>{
-
-setNews(res.data);
-
-})
-
-.catch((err)=>{
-
-console.log(err);
-
-});
-
+getNews();
 
 },[id]);
 
@@ -36,11 +65,222 @@ console.log(err);
 
 
 
-if(!news){
 
-return <h2>Loading...</h2>
+
+// ================= ADD COMMENT =================
+
+
+const addComment = async()=>{
+
+
+if(!comment.trim()){
+
+alert("Write comment");
+
+return;
 
 }
+
+
+try{
+
+
+const token = localStorage.getItem("token");
+
+
+
+await axios.post(
+
+`http://localhost:8000/news/comment/${id}`,
+
+{
+text:comment
+},
+
+{
+
+headers:{
+Authorization:"Bearer "+token
+}
+
+}
+
+);
+
+
+
+setComment("");
+
+getNews();
+
+
+
+}
+
+catch(error){
+
+console.log(error.response);
+
+}
+
+};
+
+
+
+
+
+
+
+
+// ================= START EDIT =================
+
+
+const editComment=(item)=>{
+
+
+setEditId(item._id);
+
+setEditText(item.text);
+
+
+};
+
+
+
+
+
+
+
+
+
+// ================= UPDATE COMMENT =================
+
+
+const updateComment = async()=>{
+
+
+try{
+
+
+const token = localStorage.getItem("token");
+
+
+
+await axios.put(
+
+`http://localhost:8000/news/comment/${id}/${editId}`,
+
+{
+text:editText
+},
+
+{
+
+headers:{
+Authorization:"Bearer "+token
+}
+
+}
+
+);
+
+
+
+setEditId(null);
+
+setEditText("");
+
+getNews();
+
+
+
+}
+
+catch(error){
+
+console.log(error.response);
+
+}
+
+
+};
+
+
+
+
+
+
+
+
+
+// ================= DELETE COMMENT =================
+
+
+const deleteComment = async(commentId)=>{
+
+
+try{
+
+
+const token = localStorage.getItem("token");
+
+
+
+await axios.delete(
+
+`http://localhost:8000/news/comment/${id}/${commentId}`,
+
+{
+
+headers:{
+Authorization:"Bearer "+token
+}
+
+}
+
+);
+
+
+
+getNews();
+
+
+
+}
+
+catch(error){
+
+console.log(error.response);
+
+}
+
+
+};
+
+
+
+
+
+
+
+
+
+if(!news){
+
+return(
+
+<h2 className="details-loading">
+
+Loading...
+
+</h2>
+
+)
+
+}
+
+
+
 
 
 
@@ -49,45 +289,15 @@ return <h2>Loading...</h2>
 return(
 
 
-<div
-
-style={{
-
-padding:"40px",
-
-background:"#f1f5f9",
-
-minHeight:"100vh"
-
-}}
-
->
+<div className="details-page">
 
 
+<div className="details-card">
+<Link to="/" className="back-link">
+← Back to Home
+</Link>
 
-<div
-
-style={{
-
-background:"white",
-
-padding:"30px",
-
-borderRadius:"15px",
-
-maxWidth:"800px",
-
-margin:"auto"
-
-}}
-
->
-
-
-
-
-
-<h1>
+<h1 className="details-title">
 
 {news.title}
 
@@ -97,29 +307,16 @@ margin:"auto"
 
 
 
-{/* Video show if available */}
-
 {
-
 news.video &&
 
 <video
 
-src={`http://localhost:8000/newsVideos/${news.video}`}
+src={news.video}
 
 controls
 
-style={{
-
-width:"100%",
-
-height:"350px",
-
-objectFit:"cover",
-
-borderRadius:"10px"
-
-}}
+className="details-media"
 
 />
 
@@ -129,30 +326,16 @@ borderRadius:"10px"
 
 
 
-
-{/* Image show if available */}
-
 {
-
 !news.video && news.image &&
 
 <img
 
-src={`http://localhost:8000/newsImages/${news.image}`}
+src={news.image}
 
 alt={news.title}
 
-style={{
-
-width:"100%",
-
-height:"350px",
-
-objectFit:"cover",
-
-borderRadius:"10px"
-
-}}
+className="details-media"
 
 />
 
@@ -163,19 +346,9 @@ borderRadius:"10px"
 
 
 
-<p
 
-style={{
 
-fontSize:"18px",
-
-lineHeight:"1.6",
-
-marginTop:"20px"
-
-}}
-
->
+<p className="details-content">
 
 {news.content}
 
@@ -185,18 +358,30 @@ marginTop:"20px"
 
 
 
+
+
+
 <p>
 
-Category: {news.category}
+Category : {news.category}
+
+</p>
+
+
+
+<p>
+
+By : {news.authorname}
 
 </p>
 
 
 
 
+
 <p>
 
-By: {news.authorname}
+❤️ Likes : {news.likes?.length || 0}
 
 </p>
 
@@ -204,11 +389,154 @@ By: {news.authorname}
 
 
 
+<hr/>
+
+
+
+
+
+
+<div id="comments">
+
+
+<h2>
+
+💬 Comments ({news.comments?.length || 0})
+
+</h2>
+
+{
+user ?
+<>
+<textarea className="comment-box" placeholder="Write your comment" value={comment}
+ onChange={(e)=>setComment(e.target.value)}/>
+
+<button className="comment-btn" onClick={addComment}>
+Add Comment
+</button>
+</>
+:
+<p>
+Login to comment
+</p>
+}
+</div>
+
+<div className="comments-section">
+{
+news.comments && news.comments.length>0 ?
+news.comments.map((item)=>(
+<div className="comment-card" key={item._id}>
+
+<h4>
+👤 {item.username}
+</h4>
+
+{
+editId === item._id ?
+<>
+<textarea
+
+className="edit-box"
+
+value={editText}
+
+onChange={(e)=>setEditText(e.target.value)}
+
+/>
+
+
+
+<button
+
+className="save-edit"
+
+onClick={updateComment}
+
+>
+
+Save
+
+</button>
+
+
+</>
+
+
+:
+
+
 <p>
 
-📅 {new Date(news.createdAt).toLocaleDateString()}
+{item.text}
 
 </p>
+
+
+
+}
+
+
+
+
+
+
+
+
+<small className="comment-date">
+
+📅 {new Date(item.createdAt)
+.toLocaleDateString()}
+
+</small>
+
+
+
+
+
+
+
+{
+
+user && user._id === item.userId.toString() &&
+
+<>
+
+
+<button
+
+className="edit-comment"
+
+onClick={()=>editComment(item)}
+
+>
+
+Edit
+
+</button>
+
+
+
+
+
+<button
+
+className="delete-comment"
+
+onClick={()=>deleteComment(item._id)}
+
+>
+
+Delete
+
+</button>
+
+
+
+</>
+
+
+}
 
 
 
@@ -218,8 +546,36 @@ By: {news.authorname}
 
 
 
+))
+
+
+:
+
+
+<p>
+
+No comments yet
+
+</p>
+
+
+}
+
+
+
+
+
 </div>
 
+
+
+
+
+
+</div>
+
+
+</div>
 
 
 )

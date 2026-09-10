@@ -2,12 +2,16 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import "./Login.css";
+
 
 const Login = () => {
+
 
   const navigate = useNavigate();
 
   const { setIsLogin, setUser } = useContext(AuthContext);
+
 
   const [loginData, setLoginData] = useState({
 
@@ -16,17 +20,10 @@ const Login = () => {
 
   });
 
+
   const [showPassword, setShowPassword] = useState(false);
 
-  const inputStyle = {
 
-    padding: "12px",
-    border: "1px solid #ccc",
-    borderRadius: "6px",
-    fontSize: "15px",
-    outline: "none"
-
-  };
 
   const handleChange = (e) => {
 
@@ -40,11 +37,15 @@ const Login = () => {
 
   };
 
+
+
  const handleSubmit = async (e) => {
 
  e.preventDefault();
 
+
  try {
+
 
  let response = await axios.post(
 
@@ -53,36 +54,64 @@ const Login = () => {
         loginData
 
       );
-console.log(response.data);
 
-      alert(response.data.message);
 
-      // Context me login save
-      setIsLogin(true);
+ console.log(response.data);
 
-localStorage.setItem(
+
+ alert(response.data.message);
+
+
+
+ setIsLogin(true);
+
+
+
+ localStorage.setItem(
+
  "isLogin",
+
  "true"
-);
 
-setUser(response.data.user);
+ );
 
-localStorage.setItem(
+
+
+ setUser(response.data.user);
+
+
+
+ localStorage.setItem(
+
  "user",
+
  JSON.stringify(response.data.user)
-);
 
-localStorage.setItem(
+ );
+
+
+
+ localStorage.setItem(
+
  "token",
+
  response.data.token
-);
-      navigate("/");
 
-    }
+ );
 
-    catch(error) {
+
+
+ navigate("/");
+
+
+ }
+
+
+ catch(error) {
+
 
       console.log(error.response);
+
 
       alert(
 
@@ -90,197 +119,203 @@ localStorage.setItem(
         "Login Failed"
 
       );
- }};
+
+
+ }
+
+
+
+ };
+
+
 
   return (
 
-    <div
 
-      style={{
+    <div className="login-page">
 
-        minHeight:"100vh",
 
-        display:"flex",
+      <div className="login-box">
 
-        justifyContent:"center",
 
-        alignItems:"center",
-
-        background:"#f1f5f9"
-
-      }}>
-
-      <div
-
-        style={{
-
-          width:"350px",
-
-          padding:"30px",
-
-          background:"white",
-
-          borderRadius:"12px",
-
-          boxShadow:"0 5px 20px rgba(0,0,0,0.15)"
-
-        }} >
-
-         <h2
-
-          style={{
-
-            textAlign:"center",
-
-            marginBottom:"25px"
-
-          }}>
+        <h2 className="login-title">
 
           Login
 
         </h2>
- <form onSubmit={handleSubmit}
 
-          style={{
 
-            display:"flex",
 
-            flexDirection:"column",
+        <form 
 
-            gap:"15px"
+        onSubmit={handleSubmit}
 
-          }}>
+        className="login-form"
 
- <input style={inputStyle} type="email"  name="email" placeholder="Enter Email" value={loginData.email} onChange={handleChange} />
+        >
 
-         <div
 
-            style={{
 
-              display:"flex",
+        <input
 
-              gap:"8px"
+        className="login-input"
 
-            }} >
+        type="email"
 
-<input
- style={{ ...inputStyle,
+        name="email"
 
-         flex:1
+        placeholder="Enter Email"
 
-         }}
+        value={loginData.email}
 
-       type={showPassword ? "text" : "password"} name="password" placeholder="Enter Password" value={loginData.password} onChange={handleChange}/>
+        onChange={handleChange}
 
- <button type="button" onClick={() => setShowPassword(!showPassword)}
+        />
 
-             style={{
 
-                padding:"10px",
 
-                border:"none",
 
-                borderRadius:"6px",
 
-                cursor:"pointer"
+        <div className="password-box">
 
-              }} >
 
-              {
 
-                showPassword ? "Hide" : "Show"
+        <input
 
-              }
 
-            </button>
+        className="login-input password-input"
 
-          </div>
 
-          <button type="submit"
+        type={showPassword ? "text" : "password"}
 
-             style={{
+        name="password"
 
-              padding:"12px",
+        placeholder="Enter Password"
 
-              background:"#2563eb",
+        value={loginData.password}
 
-              color:"white",
+        onChange={handleChange}
 
-              border:"none",
+        />
 
-              borderRadius:"6px",
 
-              fontSize:"16px",
 
-              cursor:"pointer"
 
-            }} >
+        <button
 
-            Login
+        type="button"
 
-          </button>
+        className="show-btn"
+
+        onClick={() => setShowPassword(!showPassword)}
+
+        >
+
+
+        {
+
+        showPassword ? "Hide" : "Show"
+
+        }
+
+
+        </button>
+
+
+
+        </div>
+
+
+
+
+
+
+        <button
+
+        type="submit"
+
+        className="login-btn"
+
+        >
+
+
+        Login
+
+
+        </button>
+
+
 
         </form>
 
-        
 
-        <p
 
-          style={{
 
-            textAlign:"center",
 
-            marginTop:"20px"
+        <p className="register-text">
 
-          }} >
 
-          Don't have an account?
+        Don't have an account?
 
- <Link to="/register"
 
-            style={{
+        <Link 
 
-              color:"#2563eb",
+        to="/register"
 
-              marginLeft:"5px",
+        className="register-link"
 
-              textDecoration:"none",
+        >
 
-              fontWeight:"bold"
+        Register
 
-            }}>
+        </Link>
 
-            Register
 
-          </Link>
 
         </p>
 
-       <p
-  style={{
-    textAlign: "center",
-    marginTop: "8px",
-    marginBottom: "0"
-  }}
->
-  <Link
-    to="/forgot-password"
-    style={{
-      color: "#2563eb",
-      textDecoration: "none",
-      fontWeight: "bold"
-    }}
-  >
-    Forgot Password?
-  </Link>
-</p>
+
+
+
+
+
+
+       <p className="forgot-text">
+
+
+       <Link
+
+       to="/forgot-password"
+
+       className="forgot-link"
+
+       >
+
+
+       Forgot Password?
+
+
+       </Link>
+
+
+       </p>
+
+
+
+
 
       </div>
 
+
+
     </div>
+
 
   );
 
+
 };
+
+
 
 export default Login;
