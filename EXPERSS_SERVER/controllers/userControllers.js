@@ -4,15 +4,14 @@ const crypto = require("crypto");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendEmail");
+require("dotenv").config();
 
 // Get All Users
-
 const getAllUsers = async(req,res)=>{
 
     try{
 
         let data = await users.find();
-
         res.send(data);
 
     }
@@ -40,15 +39,19 @@ const verifyToken = async(req,res)=>{
             return res.status(401)
             .send("No token provided");
         }
+//.env will store
+let {id} = jwt.verify(
+    token,
+    process.env.JWT_SECRET
+);
 
-        let {id} = jwt.verify(
-            token,
-            "thisisyourprivatekey"
-        );
+        // let {id} = jwt.verify(
+        //     token,
+        //     "thisisyourprivatekey"
+        // );
 
-        let user = await users.findById(id)
-        .select("-password");
-
+        let user = await users.findById(id);
+        user.password = undefined;
         if(!user){
 
             return res.status(404)
@@ -257,23 +260,18 @@ const loginUser = async(req,res)=>{
 
         }
 
-        let token = jwt.sign(
+   let token = jwt.sign(
 
-            {
+    {
+        id: existingUser._id
+    },
 
-                id:existingUser._id
+    process.env.JWT_SECRET,
 
-            },
-
-
-            "thisisyourprivatekey",
-
-
-            {
-
-                expiresIn:"1h"
-
-            });
+    {
+        expiresIn:"1h"
+    }
+);
 
         res.status(200)
         .send({

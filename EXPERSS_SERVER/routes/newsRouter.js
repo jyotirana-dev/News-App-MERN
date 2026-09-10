@@ -4,7 +4,7 @@ const checkLogin = require("../middleware/checkLogin");
 const checkAdmin = require("../middleware/checkAdmin");
 const upload = require("../middleware/multer");
 
-const { getAllNews, addNews, updateNews, deleteNews, getMyNews,getSingleNews,likeNews}=require("../controllers/newsControllers");
+const { getAllNews, addNews, updateNews, deleteNews, getMyNews,getSingleNews,likeNews,addComment,deleteComment,editComment}=require("../controllers/newsControllers");
 const Router=express.Router();
 
 Router.get("/",getAllNews);
@@ -40,5 +40,10 @@ Router.delete("/delete",checkLogin,checkAdmin,deleteNews);
 
 Router.put("/like/:id",checkLogin,likeNews);
 
+Router.post("/comment/:id",checkLogin,addComment);
+
+Router.delete("/comment/:newsId/:commentId",checkLogin,deleteComment);
+
+Router.put("/comment/:newsId/:commentId",checkLogin,editComment);
 
 module.exports=Router;
