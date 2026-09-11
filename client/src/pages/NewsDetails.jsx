@@ -4,6 +4,7 @@ import axios from "axios";
 import {AuthContext} from "../AuthContext";
 import "./NewsDetails.css";
 import {Link} from "react-router-dom";
+import API_URL from "../api";
 
 const NewsDetails =()=>{
 
@@ -34,7 +35,9 @@ const getNews = async()=>{
 try{
 
 let response = await axios.get(
-`http://localhost:8000/news/${id}`
+// `http://localhost:8000/news/${id}`
+`${API_URL}/news/${id}`
+
 );
 
 
@@ -91,7 +94,8 @@ const token = localStorage.getItem("token");
 
 await axios.post(
 
-`http://localhost:8000/news/comment/${id}`,
+// `http://localhost:8000/news/comment/${id}`,
+`${API_URL}/news/comment/${id}`,
 
 {
 text:comment
@@ -168,7 +172,8 @@ const token = localStorage.getItem("token");
 
 await axios.put(
 
-`http://localhost:8000/news/comment/${id}/${editId}`,
+// `http://localhost:8000/news/comment/${id}/${editId}`,
+`${API_URL}/news/comment/${id}/${editId}`,
 
 {
 text:editText
@@ -228,7 +233,8 @@ const token = localStorage.getItem("token");
 
 await axios.delete(
 
-`http://localhost:8000/news/comment/${id}/${commentId}`,
+// `http://localhost:8000/news/comment/${id}/${commentId}`,
+`${API_URL}/news/comment/${id}/${commentId}`,
 
 {
 

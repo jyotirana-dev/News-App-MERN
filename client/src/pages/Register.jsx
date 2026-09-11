@@ -46,7 +46,8 @@ const Register = () => {
 
       let response = await axios.post(
 
-        "http://localhost:8000/user/register",
+        // "http://localhost:8000/user/register",
+       `${API_URL}/user/register`,
 
         user
 

@@ -3,7 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
-
+import API_URL from "../api";
 
 const Login = () => {
 
@@ -48,8 +48,8 @@ const Login = () => {
 
 
  let response = await axios.post(
-
-        "http://localhost:8000/user/login",
+//"http://localhost:8000/user/login",
+        `${API_URL}/user/login`,
 
         loginData
 

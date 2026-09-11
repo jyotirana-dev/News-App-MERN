@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./CreateNews.css";
-
+import API_URL from "../api";
 
 const CreateNews = () => {
 
@@ -90,7 +90,8 @@ formData.append("video", video);
 
 let response = await axios.post(
 
-"http://localhost:8000/news/add",
+// "http://localhost:8000/news/add",
+`${API_URL}/news/add`,
 
 formData,
 

@@ -35,7 +35,8 @@ const token = localStorage.getItem("token");
 if(token){
 axios.get(
 
-"http://localhost:8000/user/verify",
+// "http://localhost:8000/user/verify",
+`${API_URL}/user/verify`,
 
 {
 

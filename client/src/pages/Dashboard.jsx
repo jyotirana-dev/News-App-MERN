@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../AuthContext";
 import "./Dashboard.css";
-
+import API_URL from "../api";
 
 const Dashboard = () => {
 const { user } = useContext(AuthContext);
@@ -18,7 +18,8 @@ const getNews = async()=>{
 try{
 const response = await axios.get(
 
-"http://localhost:8000/news/mynews",
+// "http://localhost:8000/news/mynews",
+`${API_URL}/news/mynews`,
 
 {
 headers:header
@@ -39,7 +40,8 @@ const handleDelete = async(id)=>{
 try{
 await axios.delete(
 
-"http://localhost:8000/news/delete",
+// "http://localhost:8000/news/delete",
+`${API_URL}/news/delete`,
 
 {
 headers:header,
@@ -64,8 +66,8 @@ const handleLike = async(id)=>{
 try{
 await axios.put(
 
-`http://localhost:8000/news/like/${id}`,
-
+// `http://localhost:8000/news/like/${id}`,
+`${API_URL}/news/like/${id}`,
 {},
 {
 headers:header
@@ -105,25 +107,19 @@ news.map((item)=>(
 item.image &&
 <img
 
-src={ item.image.startsWith("http") ? item.image
-:
-
-`http://localhost:8000/newsImages/${item.image}`
-
-}
-alt="news"
-className="dashboard-image"
+src={item.image}
+  alt="news"
+  className="dashboard-image"
 />
 }
 
 {
 item.video &&
-<video src={`http://localhost:8000/newsVideos/${item.video}`} controls className="dashboard-video" />
+<video src={item.video}
+  controls
+  className="dashboard-video"
+/>
 }
-
-<h2 className="dashboard-title">
-{item.title}
-</h2>
 
 <p>
 Category: {item.category}

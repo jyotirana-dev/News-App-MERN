@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../AuthContext";
 import "./Home.css";
-
+import API_URL from "../api";
 
 const Home = () => {
 
@@ -28,7 +28,8 @@ const getNews = async()=>{
 try{
 
 let response = await axios.get(
-"http://localhost:8000/news"
+// "http://localhost:8000/news"
+`${API_URL}/news`,
 );
 
 //to show data open without login
@@ -84,8 +85,8 @@ return;
 
 await axios.put(
 
-`http://localhost:8000/news/like/${id}`,
-
+// `http://localhost:8000/news/like/${id}`,
+`${API_URL}/news/like/${id}`,
 {},
 
 {
@@ -274,12 +275,12 @@ className="news-card"
 
 
 
-{
+{/* {
 
-item.video ?
+item.video ? */}
 
 
-<video
+{/* <video
 
 src={item.video}
 
@@ -319,9 +320,23 @@ className="news-media"
 />
 
 
-}
+} */}
 
-
+{item.video ? (
+  <video
+    src={item.video}
+    controls
+    className="news-media"
+  />
+) : (
+  item.image && (
+    <img
+      src={item.image}
+      alt={item.title}
+      className="news-media"
+    />
+  )
+)}
 
 
 
