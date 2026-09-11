@@ -114,15 +114,22 @@ font-size:14px;
 
 /* Read More */
 .read-more{
+
+background:none;
+border:none;
 color:#2563eb;
 text-decoration:none;
 font-weight:600;
 font-size:14px;
 padding:8px 5px;
+cursor:pointer;
+
 }
 
 .read-more:hover{
+
 text-decoration:underline;
+
 }
 
 /* Mobile */

@@ -31,6 +31,9 @@ let response = await axios.get(
 "http://localhost:8000/news"
 );
 
+//to show data open without login
+console.log("NEWS DATA:", response.data);
+
 setNews(response.data);
 
 }
@@ -431,10 +434,34 @@ className="comment-count"
 
 
 
+<button
+
+className="read-more"
+
+onClick={()=>{
+
+if(!user){
+
+alert("Please login first to read full news");
+
+navigate("/login");
+
+return;
+
+}
+
+navigate(`/news/${item._id}`);
+
+}}
+
+>
+
+Read More &gt;&gt;
+
+</button>
 
 
-
-
+{/* 
 <Link
 
 to={`/news/${item._id}`}
@@ -445,7 +472,7 @@ className="read-more"
 
 Read More &gt;&gt;
 
-</Link>
+</Link> */}
 
 
 
