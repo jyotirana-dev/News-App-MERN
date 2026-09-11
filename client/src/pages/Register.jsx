@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./Register.css";
-
+import API_URL from "../api";
 
 const Register = () => {
 

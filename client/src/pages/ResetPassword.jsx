@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./ResetPassword.css";
+import API_URL from "../api";
 
 function ResetPassword() {
 

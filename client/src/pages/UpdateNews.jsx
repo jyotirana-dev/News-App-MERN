@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./UpdateNews.css";
-
+import API_URL from "../api";
 
 const UpdateNews = () => {
 
@@ -61,7 +61,8 @@ const UpdateNews = () => {
 
       let response = await axios.put(
 
-      `http://localhost:8000/news/update?id=${news._id}`,
+      // `http://localhost:8000/news/update?id=${news._id}`,
+      `${API_URL}/news/update?id=${news._id}`,
 
       news,
 

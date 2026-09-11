@@ -12,7 +12,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import "./App.css";
-
+import API_URL from "./api";
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 
