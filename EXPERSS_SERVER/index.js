@@ -100,7 +100,7 @@ const userRouter = require("./routes/userRouter");
 const newsRouter = require("./routes/newsRouter");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+require("dotenv").config();
 const server = express();
 
 // Middleware
@@ -125,15 +125,18 @@ server.get("/", (req, res) => {
 
 
 // MongoDB Connection
-mongoose.connect("mongodb://localhost:27017/mydb")
-.then(() => {
+mongoose.connect(process.env.MONGO_URL)
+.then(()=>{
     console.log("connected to db");
 })
 .catch((error)=>{
-    console.log(error);
+    console.log("MongoDB Error:", error);
+
 });
 
+
 // Server Start
-server.listen(8000, () => {
-    console.log("server is listening on port 8000");
+const PORT = process.env.PORT || 8000;
+server.listen(PORT,()=>{
+    console.log(`server is listening on port ${PORT}`);
 });
