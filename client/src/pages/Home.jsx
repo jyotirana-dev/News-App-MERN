@@ -278,6 +278,18 @@ Clear
 </div>
 
 
+{
+search && filteredNews.length === 0 && (
+
+<p className="no-result">
+
+No Result Found
+
+</p>
+
+)
+
+}
 
 
 
