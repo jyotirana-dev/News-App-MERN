@@ -216,6 +216,17 @@ Latest News
 
 <div className="search-container">
 
+
+<form
+className="search-container"
+onSubmit={(e)=>{
+  e.preventDefault();
+
+  setSearch(searchText);
+  setCurrentPage(1);
+}}
+>
+
 <input
 
 type="text"
@@ -237,15 +248,9 @@ className="search-box"
 
 <button
 
+type="submit"
+
 className="search-btn"
-
-onClick={()=>{
-
-setSearch(searchText);
-
-setCurrentPage(1);
-
-}}
 
 >
 
@@ -255,6 +260,8 @@ Search
 
 
 <button
+
+type="button"
 
 className="clear-btn"
 
@@ -275,7 +282,7 @@ Clear
 </button>
 
 
-</div>
+</form>
 
 
 {
@@ -290,9 +297,6 @@ No Result Found
 )
 
 }
-
-
-
 
 
 <div className="news-container">
