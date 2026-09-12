@@ -21,8 +21,8 @@ async function checkLogin(req,res,next){
 
 
         let {id} = jwt.verify(
-            token,
-            "thisisyourprivatekey"
+        token,
+        process.env.JWT_SECRET
         );
 
 
