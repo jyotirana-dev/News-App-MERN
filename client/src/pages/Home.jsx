@@ -13,6 +13,7 @@ const navigate = useNavigate();
 
 const [news,setNews]=useState([]);
 
+const [searchText,setSearchText]=useState("");
 const [search,setSearch]=useState("");
 
 const [currentPage,setCurrentPage] = useState(1);
@@ -213,19 +214,19 @@ Latest News
 
 
 
+<div className="search-container">
+
 <input
 
 type="text"
 
 placeholder="Search news..."
 
-value={search}
+value={searchText}
 
 onChange={(e)=>{
 
-setSearch(e.target.value);
-
-setCurrentPage(1);
+setSearchText(e.target.value);
 
 }}
 
@@ -233,6 +234,48 @@ className="search-box"
 
 />
 
+
+<button
+
+className="search-btn"
+
+onClick={()=>{
+
+setSearch(searchText);
+
+setCurrentPage(1);
+
+}}
+
+>
+
+Search
+
+</button>
+
+
+<button
+
+className="clear-btn"
+
+onClick={()=>{
+
+setSearchText("");
+
+setSearch("");
+
+setCurrentPage(1);
+
+}}
+
+>
+
+Clear
+
+</button>
+
+
+</div>
 
 
 
