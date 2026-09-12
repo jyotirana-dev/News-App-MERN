@@ -214,9 +214,6 @@ Latest News
 
 
 
-<div className="search-container">
-
-
 <form
 className="search-container"
 onSubmit={(e)=>{
