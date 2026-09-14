@@ -1,6 +1,8 @@
 const mongoose=require("mongoose")
 let userSchema=new mongoose.Schema({
 
+
+
     name:{
         type:String,
         required:true,
@@ -34,7 +36,12 @@ role:{
     age:{
         type:Number,
 
-    }
+    },
+
+        profilePic:{
+         type:String,
+         default:""
+}
 
 })
 let users=mongoose.model("User",userSchema)

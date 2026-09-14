@@ -1,9 +1,11 @@
 const users = require("../models/userModels");
+const cloudinary = require("../config/cloudinary");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendEmail");
+
 require("dotenv").config();
 
 // Get All Users
@@ -359,6 +361,46 @@ const updateUser = async(req,res)=>{
 
     }};
 
+//updateProfilePic
+const updateProfilePic = async(req,res)=>{
+
+try{
+
+
+let user = await users.findById(req.user._id);
+
+
+let result = await cloudinary.uploader.upload(
+
+req.file.path,
+
+{
+folder:"profileImages"
+}
+
+);
+
+
+user.profilePic=result.secure_url;
+
+
+await user.save();
+
+
+res.send(user);
+
+
+}
+
+catch(error){
+
+res.status(500).send({
+message:error.message
+});
+
+}
+
+};
 
 // Delete User
 
@@ -405,6 +447,6 @@ updateUser,
 deleteUser,
 verifyToken,
 forgotPassword,
-resetPassword
-
+resetPassword,
+updateProfilePic
 };
