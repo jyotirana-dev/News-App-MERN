@@ -1,9 +1,9 @@
 import React, {useEffect, useState, useContext} from "react";
-import {useParams,useNavigate} from "react-router-dom";
+import {useParams,useNavigate,Link} from "react-router-dom";
 import axios from "axios";
 import {AuthContext} from "../AuthContext";
 import "./NewsDetails.css";
-import {Link} from "react-router-dom";
+
 import API_URL from "../api";
 
 const NewsDetails =()=>{

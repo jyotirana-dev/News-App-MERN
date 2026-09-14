@@ -13,6 +13,7 @@
 .login-box{
 
     width:350px;
+    max-width:90%;
     padding:30px;
     background:white;
     border-radius:12px;
@@ -127,5 +128,43 @@
     text-decoration:none;
     font-weight:bold;
     margin-left:5px;
+
+}
+
+@media(max-width:600px){
+
+.login-page{
+
+    padding:20px;
+
+}
+
+
+.login-box{
+
+    padding:20px;
+
+}
+
+
+.login-title{
+
+    font-size:24px;
+
+}
+
+
+.password-box{
+
+    flex-direction:column;
+
+}
+
+
+.show-btn{
+
+    width:100%;
+
+}
 
 }

@@ -5,6 +5,7 @@
     padding:15px 40px;
     background:#2563eb;
     color:white;
+    flex-wrap:wrap;
 }
 
 .navbar-logo{
