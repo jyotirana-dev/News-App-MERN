@@ -7,8 +7,6 @@ import {Link} from "react-router-dom";
 import API_URL from "../api";
 
 const NewsDetails =()=>{
-
-
 const {id}=useParams();
 const navigate = useNavigate();
 
@@ -16,17 +14,11 @@ const {user}=useContext(AuthContext);
 console.log("DETAIL USER:", user);
 
 const [news,setNews]=useState(null);
-
 const [comment,setComment]=useState("");
-
 
 // Edit ke liye
 const [editId,setEditId]=useState(null);
-
 const [editText,setEditText]=useState("");
-
-
-
 
 // ================= GET NEWS =================
 
@@ -53,13 +45,20 @@ catch(error){
 
 console.log(error);
 
+if(error.response?.status === 401){
+
+alert("Please login first to read full news");
+
+navigate("/login");
+
+}
+
 }
 
 };
 
 
-
-
+// GET NEWS CALL
 
 useEffect(()=>{
 
@@ -68,17 +67,8 @@ getNews();
 },[id]);
 
 
-
-
-
-
-
 // ================= ADD COMMENT =================
-
-
 const addComment = async()=>{
-
-
 if(!comment.trim()){
 
 alert("Write comment");
@@ -87,14 +77,8 @@ return;
 
 }
 
-
 try{
-
-
 const token = localStorage.getItem("token");
-
-
-
 await axios.post(
 
 // `http://localhost:8000/news/comment/${id}`,
@@ -110,69 +94,33 @@ headers:{
 Authorization:"Bearer "+token
 }
 
-}
-
-);
-
-
-
+});
 setComment("");
-
 getNews();
-
-
 
 }
 
 catch(error){
+console.log(error);
+if(error.response?.status === 401){
 
-console.log(error.response);
+alert("Please login first to comment");
 
-}
+navigate("/login");
 
+}}
 };
-
-
-
-
-
-
-
 
 // ================= START EDIT =================
-
-
 const editComment=(item)=>{
-
-
 setEditId(item._id);
-
 setEditText(item.text);
-
-
 };
 
-
-
-
-
-
-
-
-
 // ================= UPDATE COMMENT =================
-
-
 const updateComment = async()=>{
-
-
 try{
-
-
 const token = localStorage.getItem("token");
-
-
-
 await axios.put(
 
 // `http://localhost:8000/news/comment/${id}/${editId}`,
@@ -186,13 +134,8 @@ text:editText
 
 headers:{
 Authorization:"Bearer "+token
-}
-
-}
-
+}}
 );
-
-
 
 setEditId(null);
 
@@ -200,40 +143,18 @@ setEditText("");
 
 getNews();
 
-
-
 }
 
 catch(error){
-
 console.log(error.response);
 
-}
-
-
-};
-
-
-
-
-
-
-
+}};
 
 
 // ================= DELETE COMMENT =================
-
-
 const deleteComment = async(commentId)=>{
-
-
 try{
-
-
 const token = localStorage.getItem("token");
-
-
-
 await axios.delete(
 
 // `http://localhost:8000/news/comment/${id}/${commentId}`,
@@ -245,37 +166,19 @@ headers:{
 Authorization:"Bearer "+token
 }
 
-}
-
-);
-
-
+});
 
 getNews();
-
-
 
 }
 
 catch(error){
-
 console.log(error.response);
 
-}
-
-
-};
-
-
-
-
-
-
-
+}};
 
 
 if(!news){
-
 return(
 
 <h2 className="details-loading">
@@ -284,23 +187,11 @@ Loading...
 
 </h2>
 
-)
-
-}
-
-
-
-
-
-
-
+)}
 
 return(
 
-
 <div className="details-page">
-
-
 <div className="details-card">
 <Link to="/" className="back-link">
 ← Back to Home
@@ -311,10 +202,6 @@ return(
 {news.title}
 
 </h1>
-
-
-
-
 
 {
 news.video &&
@@ -328,12 +215,7 @@ controls
 className="details-media"
 
 />
-
 }
-
-
-
-
 
 {
 !news.video && news.image &&
@@ -347,15 +229,7 @@ alt={news.title}
 className="details-media"
 
 />
-
 }
-
-
-
-
-
-
-
 
 <p className="details-content">
 
@@ -363,20 +237,11 @@ className="details-media"
 
 </p>
 
-
-
-
-
-
-
-
 <p>
 
 Category : {news.category}
 
 </p>
-
-
 
 <p>
 
@@ -385,28 +250,15 @@ By : {news.authorname}
 </p>
 
 
-
-
-
 <p>
 
 ❤️ Likes : {news.likes?.length || 0}
 
 </p>
 
-
-
-
-
 <hr/>
 
-
-
-
-
-
 <div id="comments">
-
 
 <h2>
 
@@ -454,8 +306,6 @@ onChange={(e)=>setEditText(e.target.value)}
 
 />
 
-
-
 <button
 
 className="save-edit"
@@ -467,13 +317,9 @@ onClick={updateComment}
 Save
 
 </button>
-
-
 </>
 
-
 :
-
 
 <p>
 
@@ -482,15 +328,7 @@ Save
 </p>
 
 
-
 }
-
-
-
-
-
-
-
 
 <small className="comment-date">
 
@@ -498,12 +336,6 @@ Save
 .toLocaleDateString()}
 
 </small>
-
-
-
-
-
-
 
 {
 
@@ -513,9 +345,7 @@ user && user._id === item.userId.toString() &&
 
 
 <button
-
 className="edit-comment"
-
 onClick={()=>editComment(item)}
 
 >
@@ -523,10 +353,6 @@ onClick={()=>editComment(item)}
 Edit
 
 </button>
-
-
-
-
 
 <button
 
@@ -539,59 +365,26 @@ onClick={()=>deleteComment(item._id)}
 Delete
 
 </button>
-
-
-
 </>
-
-
 }
 
-
-
-
-
 </div>
-
-
 
 ))
 
-
 :
 
-
 <p>
-
 No comments yet
-
 </p>
 
-
 }
 
-
-
-
-
 </div>
 
-
-
-
-
-
+</div>
 </div>
 
-
-</div>
-
-
-)
-
-
-}
-
-
+)}
 
 export default NewsDetails;
