@@ -34,15 +34,18 @@ const getNews = async()=>{
 
 try{
 
-let response = await axios.get(
-// `http://localhost:8000/news/${id}`
-`${API_URL}/news/${id}`
+const token = localStorage.getItem("token");
 
+let response = await axios.get(
+`${API_URL}/news/${id}`,
+{
+headers:{
+Authorization:"Bearer "+token
+}
+}
 );
 
-
 setNews(response.data);
-
 
 }
 

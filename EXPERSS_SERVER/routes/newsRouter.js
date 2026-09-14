@@ -11,7 +11,7 @@ Router.get("/",getAllNews);
 
 Router.get("/mynews",checkLogin,checkAdmin,getMyNews);
 
-Router.get("/:id",getSingleNews);
+Router.get("/:id",checkLogin,getSingleNews);
 
 // Router.post(
 // "/add",
