@@ -34,6 +34,15 @@ Dashboard
 }
 
 {
+isLogin &&
+
+<Link to="/profile" className="navbar-link">
+Profile
+</Link>
+
+}
+
+{
 isLogin ?
 <button onClick={() => { 
   setIsLogin(false);

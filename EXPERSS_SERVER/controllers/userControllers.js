@@ -50,15 +50,21 @@ let {id} = jwt.verify(
         //     "thisisyourprivatekey"
         // );
 
-        let user = await users.findById(id);
-        user.password = undefined;
-        if(!user){
+     let user = await users.findById(id);
 
-            return res.status(404)
-            .send("User not found");
 
-        }
-        res.send(user);
+if(!user){
+
+    return res.status(404)
+    .send("User not found");
+
+}
+
+
+user.password = undefined;
+
+
+res.send(user);
     }
     catch(error){
 

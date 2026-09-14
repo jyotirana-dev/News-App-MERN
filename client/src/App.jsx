@@ -10,6 +10,7 @@ import UpdateNews from "./pages/UpdateNews";
 import NewsDetails from "./pages/NewsDetails";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import "./App.css";
 import API_URL from "./api";
@@ -119,6 +120,8 @@ return (
 { user && user.role === "admin" && <Route path="/update-news" element={<UpdateNews />} /> }
 
 <Route path="/news/:id" element={<NewsDetails />} />
+
+<Route path="/profile" element={<Profile />} />
 
 <Route path='*' element={<NotFound/>}/>
 
