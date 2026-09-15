@@ -362,6 +362,7 @@ const updateUser = async(req,res)=>{
     }};
 
 //updateProfilePic
+
 const updateProfilePic = async(req,res)=>{
 
 try{
@@ -370,18 +371,40 @@ try{
 let user = await users.findById(req.user._id);
 
 
-let result = await cloudinary.uploader.upload(
+let result = await new Promise((resolve,reject)=>{
 
-req.file.path,
+
+cloudinary.uploader.upload_stream(
 
 {
+
 folder:"profileImages"
+
+},
+
+(error,result)=>{
+
+if(error){
+
+reject(error);
+
 }
 
-);
+else{
+
+resolve(result);
+
+}
+
+}
+
+).end(req.file.buffer);
 
 
-user.profilePic=result.secure_url;
+});
+
+
+user.profilePic = result.secure_url;
 
 
 await user.save();
@@ -394,13 +417,18 @@ res.send(user);
 
 catch(error){
 
+console.log(error);
+
 res.status(500).send({
+
 message:error.message
+
 });
 
 }
 
 };
+
 
 // Delete User
 

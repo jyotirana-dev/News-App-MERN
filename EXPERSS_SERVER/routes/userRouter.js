@@ -1,7 +1,7 @@
 const express = require("express");
 
 const Router = express.Router();
-const uploadProfile = require("../middleware/profileUpload");
+const upload = require("../middleware/multer");
 
 const validator = require("../middleware/validator");
 const verifyToken = require("../middleware/checkLogin");
@@ -26,6 +26,6 @@ Router.delete("/delete",deleteUser);
 
 Router.get("/verify", verifyToken, (req,res)=>{res.send(req.user);});
 
-Router.put("/upload-profile",verifyToken,uploadProfile.single("profilePic"),updateProfilePic);
+Router.put("/upload-profile",verifyToken,upload.single("profilePic"),updateProfilePic);
 
 module.exports=Router;
