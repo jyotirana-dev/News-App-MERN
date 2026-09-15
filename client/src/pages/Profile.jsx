@@ -8,7 +8,7 @@ import "./Profile.css";
 const Profile = () => {
 
 
-const { user } = useContext(AuthContext);
+const { user,setUser } = useContext(AuthContext);
 
 const [image,setImage] = useState(null);
 const [preview,setPreview] = useState(user.profilePic || "");
@@ -74,6 +74,14 @@ Authorization:"Bearer "+token
 alert("Profile image uploaded");
 
 setPreview(response.data.profilePic);
+
+setUser(response.data);
+
+localStorage.setItem(
+"user",
+JSON.stringify(response.data)
+);
+
 console.log(response.data);
 
 

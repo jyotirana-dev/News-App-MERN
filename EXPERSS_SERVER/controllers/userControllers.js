@@ -92,7 +92,53 @@ const registerUser = async(req,res)=>{
             .send(err[0]);
         }
 
+
 let data = req.body;
+let profilePic = "";
+
+
+if(req.file){
+
+
+let result = await new Promise((resolve,reject)=>{
+
+
+cloudinary.uploader.upload_stream(
+
+{
+
+folder:"profileImages"
+
+},
+
+(error,result)=>{
+
+
+if(error){
+
+reject(error);
+
+}
+
+else{
+
+resolve(result);
+
+}
+
+
+}
+
+).end(req.file.buffer);
+
+
+});
+
+
+profilePic = result.secure_url;
+
+
+}
 let existingUser = await users.findOne({
 
             email:data.email
@@ -118,7 +164,8 @@ if(existingUser){
 
             ...data,
 
-            password:hashPassword
+            password:hashPassword,
+             profilePic:profilePic
 
         });
 
@@ -298,7 +345,9 @@ const loginUser = async(req,res)=>{
 
                 age:existingUser.age,
 
-                role:existingUser.role
+                role:existingUser.role,
+
+                profilePic: existingUser.profilePic
             }
 
         });

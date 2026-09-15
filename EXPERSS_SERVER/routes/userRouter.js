@@ -12,7 +12,7 @@ const {
 
 Router.get("/",getAllUsers);
 
-Router.post("/register",validator,registerUser);
+Router.post("/register",upload.single("profilePic"),validator,registerUser);
 
 Router.post("/login",loginUser);
 

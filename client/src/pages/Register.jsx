@@ -3,258 +3,337 @@ import axios from "axios";
 import "./Register.css";
 import API_URL from "../api";
 
+
 const Register = () => {
 
 
-  const [user, setUser] = useState({
+const [user,setUser] = useState({
 
-    name: "",
-    email: "",
-    password: "",
-    age: ""
+name:"",
+email:"",
+password:"",
+age:""
 
-  });
+});
 
 
+const [image,setImage] = useState(null);
 
-  const [showPassword, setShowPassword] = useState(false);
 
+const [showPassword,setShowPassword] = useState(false);
 
 
-  const handleChange = (e) => {
 
-    setUser({
+const handleChange = (e)=>{
 
-      ...user,
 
-      [e.target.name]: e.target.value
+setUser({
 
-    });
+...user,
 
-  };
+[e.target.name]:e.target.value
 
+});
 
 
-  const handleSubmit = async (e) => {
+};
 
 
-    e.preventDefault();
 
+const handleSubmit = async(e)=>{
 
-    try {
 
+e.preventDefault();
 
-      let response = await axios.post(
 
-        // "http://localhost:8000/user/register",
-       `${API_URL}/user/register`,
+try{
 
-        user
 
-      );
+const formData = new FormData();
 
 
-      console.log(response.data);
+formData.append(
+"name",
+user.name
+);
 
 
-      alert("Register Successful");
+formData.append(
+"email",
+user.email
+);
 
 
+formData.append(
+"password",
+user.password
+);
 
-      setUser({
 
-        name: "",
-        email: "",
-        password: "",
-        age: ""
+formData.append(
+"age",
+user.age
+);
 
-      });
 
 
+formData.append(
+"profilePic",
+image
+);
 
-    } catch(error) {
 
 
-      console.log(error.response);
+let response = await axios.post(
 
+`${API_URL}/user/register`,
 
-      alert(error.response?.data || error.message);
+formData
 
+);
 
-    }
 
 
-  };
+console.log(response.data);
 
 
 
+alert("Register Successful");
 
-  return (
 
 
-    <div className="register-page">
+setUser({
 
+name:"",
+email:"",
+password:"",
+age:""
 
-      <div className="register-box">
+});
 
 
-        <h2 className="register-title">
+setImage(null);
 
-          Register
 
-        </h2>
 
+}
 
 
+catch(error){
 
-        <form 
 
-        onSubmit={handleSubmit}
+console.log(error.response);
 
-        className="register-form"
 
-        >
+alert(
+error.response?.data || error.message
+);
 
 
+}
 
 
-        <input
 
-        className="register-input"
+};
 
-        type="text"
 
-        name="name"
 
-        placeholder="Enter Name"
 
-        value={user.name}
+return(
 
-        onChange={handleChange}
 
-        />
+<div className="register-page">
 
 
+<div className="register-box">
 
 
 
-        <input
+<h2 className="register-title">
 
-        className="register-input"
+Register
 
-        type="email"
+</h2>
 
-        name="email"
 
-        placeholder="Enter Email"
 
-        value={user.email}
 
-        onChange={handleChange}
+<form
 
-        />
+onSubmit={handleSubmit}
 
+className="register-form"
 
+>
 
 
 
 
-        <div className="register-password-box">
+<input
 
+className="register-input"
 
+type="text"
 
-        <input
+name="name"
 
-        className="register-input register-password-input"
+placeholder="Enter Name"
 
-        type={showPassword ? "text" : "password"}
+value={user.name}
 
-        name="password"
+onChange={handleChange}
 
-        placeholder="Enter Password"
+/>
 
-        value={user.password}
 
-        onChange={handleChange}
 
-        />
 
 
+<input
 
+className="register-input"
 
+type="email"
 
-        <button
+name="email"
 
-        type="button"
+placeholder="Enter Email"
 
-        className="register-show-btn"
+value={user.email}
 
-        onClick={() => setShowPassword(!showPassword)}
+onChange={handleChange}
 
-        >
+/>
 
 
-        {showPassword ? "Hide" : "Show"}
 
 
-        </button>
 
+<div className="register-password-box">
 
 
-        </div>
+<input
 
+className="register-input register-password-input"
 
+type={
+showPassword 
+? "text" 
+: "password"
+}
 
+name="password"
 
+placeholder="Enter Password"
 
+value={user.password}
 
-        <input
+onChange={handleChange}
 
-        className="register-input"
+/>
 
-        type="number"
 
-        name="age"
 
-        placeholder="Enter Age"
+<button
 
-        value={user.age}
+type="button"
 
-        onChange={handleChange}
+className="register-show-btn"
 
-        />
+onClick={()=>setShowPassword(!showPassword)}
 
+>
 
 
+{
+showPassword 
+? "Hide"
+:
+"Show"
+}
 
 
+</button>
 
-        <button
 
-        type="submit"
+</div>
 
-        className="register-btn"
 
-        >
 
-        Register
 
-        </button>
 
+<input
 
+className="register-input"
 
+type="number"
 
-        </form>
+name="age"
 
+placeholder="Enter Age"
 
+value={user.age}
 
-      </div>
+onChange={handleChange}
 
+/>
 
-    </div>
 
 
-  );
+
+
+
+<input
+
+className="register-input"
+
+type="file"
+
+accept="image/*"
+
+onChange={(e)=>{
+
+setImage(
+e.target.files[0]
+)
+
+}}
+
+/>
+
+
+
+
+
+
+<button
+
+type="submit"
+
+className="register-btn"
+
+>
+
+
+Register
+
+
+</button>
+
+
+
+</form>
+
+
+
+</div>
+
+
+</div>
+
+
+);
+
 
 };
 
