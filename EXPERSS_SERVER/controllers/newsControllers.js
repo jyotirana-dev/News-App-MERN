@@ -106,48 +106,70 @@ message:error.message
 
 // ================= ADD NEWS =================
 
-
 const addNews = async(req,res)=>{
-
 
 try{
 
+console.log("FILES:",req.files);
+console.log("BODY:",req.body);
 
 let image="";
 let video="";
 
 
+// IMAGE UPLOAD
 
 if(req.files && req.files.image){
 
 
-let result = await cloudinary.uploader.upload(
+let result = await new Promise((resolve,reject)=>{
 
-req.files.image[0].path,
+
+cloudinary.uploader.upload_stream(
 
 {
 
 folder:"newsImages"
 
+},
+
+(error,result)=>{
+
+if(error){
+
+reject(error);
+
+}
+else{
+
+resolve(result);
+
 }
 
-);
+}
+
+).end(req.files.image[0].buffer);
 
 
-image=result.secure_url;
+});
+
+
+image = result.secure_url;
 
 
 }
 
 
 
+// VIDEO UPLOAD
 
 if(req.files && req.files.video){
 
 
-let result = await cloudinary.uploader.upload(
+let result = await new Promise((resolve,reject)=>{
 
-req.files.video[0].path,
+
+cloudinary.uploader.upload_stream(
 
 {
 
@@ -155,19 +177,38 @@ resource_type:"video",
 
 folder:"newsVideos"
 
+},
+
+(error,result)=>{
+
+
+if(error){
+
+reject(error);
+
+}
+else{
+
+resolve(result);
+
 }
 
-);
+}
+
+).end(req.files.video[0].buffer);
 
 
-video=result.secure_url;
+});
+
+
+video = result.secure_url;
 
 
 }
 
 
 
-
+// CREATE NEWS (if blocks ke bahar)
 
 let news = await News.create({
 
@@ -179,16 +220,14 @@ video:video,
 
 userId:req.user._id
 
-
 });
-
 
 
 res.send(news);
 
 
-
 }
+
 
 catch(error){
 
@@ -208,16 +247,10 @@ message:error.message
 
 };
 
-
-
-
-
-
 // ================= UPDATE NEWS =================
 
 
 const updateNews = async(req,res)=>{
-
 
 try{
 
@@ -236,8 +269,6 @@ new:true
 
 );
 
-
-
 res.send(updatedNews);
 
 
@@ -253,14 +284,7 @@ message:error.message
 
 }
 
-
 };
-
-
-
-
-
-
 
 // ================= DELETE NEWS =================
 
@@ -312,12 +336,6 @@ message:error.message
 
 
 };
-
-
-
-
-
-
 
 // ================= LIKE NEWS =================
 
@@ -400,13 +418,6 @@ message:error.message
 };
 
 
-
-
-
-
-
-
-
 // ================= ADD COMMENT =================
 
 
@@ -431,8 +442,6 @@ message:"News not found"
 }
 
 
-
-
 news.comments.push({
 
 userId:req.user._id,
@@ -444,13 +453,7 @@ text:req.body.text
 });
 
 
-
-
-
 await news.save();
-
-
-
 
 res.send(news);
 
@@ -473,13 +476,6 @@ message:error.message
 
 
 };
-
-
-
-
-
-
-
 
 
 // ================= DELETE COMMENT =================
@@ -510,9 +506,6 @@ message:"News not found"
 }
 
 
-
-
-
 const comment = news.comments.id(commentId);
 
 
@@ -526,9 +519,6 @@ message:"Comment not found"
 });
 
 }
-
-
-
 
 
 if(
@@ -547,17 +537,9 @@ message:"You can delete only your comment"
 
 }
 
-
-
-
-
 comment.deleteOne();
 
-
-
 await news.save();
-
-
 
 
 res.send({
@@ -653,10 +635,6 @@ message:error.message
 
 
 };
-
-
-
-
 
 
 module.exports={
